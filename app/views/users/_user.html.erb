@@ -1,0 +1,13 @@
+<tr id="user_row_<%= user.id %>">
+  <td><%= user.name %></td>
+  <td><%= user.email %></td>
+  <td><%= user.city %></td>
+  <td><%= user.state %></td>
+  <td><%= user.country %></td>
+  <td><%= user.contact_number %></td>
+  <td>
+    <%= link_to "Edit", edit_user_path(user), class: "btn btn-warning" %>
+    <%= link_to "Show", user_path(user), class: "btn btn-info" %>
+    <%= link_to "Delete", user_path(user), method: :delete, data: { confirm: "Are you Sure?"}, class: "btn btn-danger" %>
+  </td>
+</tr>
