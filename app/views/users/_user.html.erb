@@ -6,7 +6,7 @@
   <td><%= user.country %></td>
   <td><%= user.contact_number %></td>
   <td>
-    <%= link_to "Edit", edit_user_path(user), class: "btn btn-warning" %>
+    <%= link_to "Edit", edit_user_path(user), class: "btn btn-warning", data: {controller: "user-modal"} %>
     <%= link_to "Show", user_path(user), class: "btn btn-info" %>
     <%= link_to "Delete", user_path(user), method: :delete, data: { confirm: "Are you Sure?"}, class: "btn btn-danger" %>
   </td>
