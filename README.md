@@ -9,3 +9,4 @@ rails g stimulus bs_modal
 
 rails g rspec:install
 RAILS_ENV=test rails db:migrate 
+rails g rspec:model User
