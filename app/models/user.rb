@@ -4,7 +4,7 @@ class User < ApplicationRecord
   before_save :check_state_present
   validate :validate_country
 
-  has_many :user_skills
+  has_many :user_skills, dependent: :destroy
   has_many :skills, through: :user_skills
 
   def check_state_present
