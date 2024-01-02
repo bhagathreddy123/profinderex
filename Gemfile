@@ -72,3 +72,4 @@ group :test do
 end
 
 gem 'cssbundling-rails'
+gem 'country_select', '~> 8.0'
