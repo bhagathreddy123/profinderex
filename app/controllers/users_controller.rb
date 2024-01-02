@@ -56,6 +56,7 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.remove("user_row_#{@user.id}")}
       format.html { redirect_to users_url, notice: "User was successfully destroyed." }
       format.json { head :no_content }
     end
