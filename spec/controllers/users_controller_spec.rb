@@ -222,6 +222,94 @@ RSpec.describe UsersController do
     end
   end
 
+  describe 'DELETE destroy' do 
+    let(:user) { create :user }
+    let(:user1) { create :user }
+
+    before(:each) do 
+      sign_in(user)
+    end
+    
+    it 'should reduce the user count by one' do 
+      delete :destroy, params: {
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(User.count).to eq(1)
+    end
+
+    it 'should not render any template with turbo_stream format' do
+      delete :destroy, params: {
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(response).to render_template(nil)
+    end
+
+     it 'should redirect to users imdex page after deleting a user' do 
+      delete :destroy, params: {
+        id: user1.id
+      }
+      expect(subject).to redirect_to(users_path)
+    end    
+  end
+
+  describe 'GET Show' do 
+    let(:user) {create :user}
+    let(:user1) { create :user}
+
+    before(:each) do 
+      sign_in(user)
+    end
+
+    it "should render the show template of user" do 
+      get :show, params: {
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(response).to render_template('users/show')
+      expect(response.media_type).to eq('text/vnd.turbo-stream.html')
+      expect(response.content_type).to eq('text/vnd.turbo-stream.html; charset=utf-8')
+    end
+  end
+
+  describe 'GET Edit' do 
+    let(:user) {create :user}
+    let(:user1) { create :user}
+
+    before(:each) do 
+      sign_in(user)
+    end
+
+    it "should render the Edit template of user" do 
+      get :edit, params: {
+        id: user1.id,
+        format: :turbo_stream
+      }
+      expect(response).to render_template('users/edit')
+      expect(response.media_type).to eq('text/vnd.turbo-stream.html')
+      expect(response.content_type).to eq('text/vnd.turbo-stream.html; charset=utf-8')
+    end
+  end
+
+  describe 'GET New' do 
+    let(:user) {create :user}
+    let(:user1) { create :user}
+
+    before(:each) do 
+      sign_in(user)
+    end
+
+    it "should render the New template of user" do 
+      get :new, params: {
+        format: :turbo_stream
+      }
+      expect(response).to render_template('users/new')
+      expect(response.media_type).to eq('text/vnd.turbo-stream.html')
+      expect(response.content_type).to eq('text/vnd.turbo-stream.html; charset=utf-8')
+    end
+  end
+
   def user_params
     {
       name: Faker::Name.name_with_middle,
