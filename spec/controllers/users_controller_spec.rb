@@ -1,34 +1,33 @@
 require 'rails_helper'
 
-RSpec.describe UsersController do 
-  describe 'GET index' do
-    let(:user) { create :user }
+RSpec.describe UsersController do
 
-    before(:each) do 
-      sign_in(user)
-      get :index
-    end
+  let(:user) { create :user }
+
+  before(:each) do 
+    sign_in(user)
+  end
+
+  describe 'GET index' do
 
     it 'assigns @users' do 
+      get :index
       expect(assigns(:users)).to eq([user])
       expect(response).to render_template('index')
     end 
 
-    it 'renders the index template' do 
+    it 'renders the index template' do
+      get :index 
       expect(response).to render_template('index')
     end
 
     it 'returns the status code ok' do 
+      get :index
       expect(response).to have_http_status(:ok)	
     end
   end
 
   describe 'POST create' do 
-    let(:user) { create :user }
-
-    before(:each) do 
-      sign_in(user)
-    end
 
     it 'should accepts the params with turbo_stream format' do 
       post :create, params: {
@@ -119,13 +118,8 @@ RSpec.describe UsersController do
   end
 
   describe 'PATCH update' do 
-    let(:user) { create :user }
     let(:user1) { create :user }
     let(:user2) { create :user }
-
-    before(:each) do 
-      sign_in(user)
-    end
 
     it 'should accepts the params with turbo_stream format' do 
       patch :update, params: {
@@ -223,13 +217,8 @@ RSpec.describe UsersController do
   end
 
   describe 'DELETE destroy' do 
-    let(:user) { create :user }
     let(:user1) { create :user }
 
-    before(:each) do 
-      sign_in(user)
-    end
-    
     it 'should reduce the user count by one' do 
       delete :destroy, params: {
         id: user1.id,
@@ -255,12 +244,7 @@ RSpec.describe UsersController do
   end
 
   describe 'GET Show' do 
-    let(:user) {create :user}
     let(:user1) { create :user}
-
-    before(:each) do 
-      sign_in(user)
-    end
 
     it "should render the show template of user" do 
       get :show, params: {
@@ -274,12 +258,7 @@ RSpec.describe UsersController do
   end
 
   describe 'GET Edit' do 
-    let(:user) {create :user}
     let(:user1) { create :user}
-
-    before(:each) do 
-      sign_in(user)
-    end
 
     it "should render the Edit template of user" do 
       get :edit, params: {
@@ -293,12 +272,7 @@ RSpec.describe UsersController do
   end
 
   describe 'GET New' do 
-    let(:user) {create :user}
     let(:user1) { create :user}
-
-    before(:each) do 
-      sign_in(user)
-    end
 
     it "should render the New template of user" do 
       get :new, params: {
@@ -307,6 +281,33 @@ RSpec.describe UsersController do
       expect(response).to render_template('users/new')
       expect(response.media_type).to eq('text/vnd.turbo-stream.html')
       expect(response.content_type).to eq('text/vnd.turbo-stream.html; charset=utf-8')
+    end
+  end
+
+  describe 'GET custom actions' do 
+    
+    it 'should return states as nil with invalid country code' do
+      get :fetch_country_states, params: {
+        country_code: 'abc',
+        format: :turbo_stream
+      }
+      expect(assigns[:states]).to eq(nil)
+    end
+
+    it 'should return states count with valid country code' do
+      get :fetch_country_states, params: {
+        country_code: 'IN',
+        format: :turbo_stream
+      }
+      expect(assigns[:states].count).to eq(36)
+    end
+
+    it 'should include a given state of the valid country' do
+      get :fetch_country_states, params: {
+        country_code: 'IN',
+        format: :turbo_stream
+      }
+      expect(assigns[:states]).to include(['MP', 'Madhya Pradesh'])
     end
   end
 
